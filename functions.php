@@ -9,7 +9,7 @@
 function aros_post_setup() {
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
-    add_theme_support('editor-styles');
+    add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption'));
     
     // 메뉴 등록
     register_nav_menus(array(
@@ -21,8 +21,8 @@ add_action('after_setup_theme', 'aros_post_setup');
 // 스타일 및 스크립트 등록
 function aros_post_scripts() {
     wp_enqueue_style('noto-sans-kr', 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
-    wp_enqueue_style('aros-post-style', get_stylesheet_uri());
-    wp_enqueue_script('aros-post-script', get_template_directory_uri() . '/js/main.js', array(), '1.0', true);
+    wp_enqueue_style('aros-post-style', get_stylesheet_uri(), array(), '1.0.0');
+    wp_enqueue_script('aros-post-script', get_template_directory_uri() . '/js/main.js', array('jquery'), '1.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'aros_post_scripts');
 
@@ -86,18 +86,19 @@ function aros_post_customize_register($wp_customize) {
         ));
         
         $wp_customize->add_setting("tab{$i}_hash", array(
-            'default' => '',
+            'default' => "aros{$i}",
             'sanitize_callback' => 'sanitize_text_field',
         ));
         
         $wp_customize->add_control("tab{$i}_hash", array(
-            'label' => "탭 {$i} Hash (예: aros1)",
+            'label' => "탭 {$i} Hash",
+            'description' => '예: aros1',
             'section' => 'aros_tabs',
             'type' => 'text',
         ));
         
         $wp_customize->add_setting("tab{$i}_active", array(
-            'default' => false,
+            'default' => ($i === 1),
             'sanitize_callback' => 'wp_validate_boolean',
         ));
         
@@ -120,7 +121,8 @@ function aros_post_customize_register($wp_customize) {
     ));
     
     $wp_customize->add_control('adsense_client', array(
-        'label' => '애드센스 클라이언트 ID (ca-pub-xxxxx)',
+        'label' => '애드센스 클라이언트 ID',
+        'description' => 'ca-pub-xxxxx 형식',
         'section' => 'aros_adsense',
         'type' => 'text',
     ));
@@ -221,56 +223,6 @@ function aros_post_customize_register($wp_customize) {
 }
 add_action('customize_register', 'aros_post_customize_register');
 
-// Gutenberg 블록 에디터에 커스텀 카드 블록 추가
-function aros_register_custom_blocks() {
-    // 스크립트 등록
-    wp_register_script(
-        'aros-editor-script',
-        get_template_directory_uri() . '/js/editor-blocks.js',
-        array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components'),
-        '1.0'
-    );
-    
-    // 에디터 스타일
-    wp_register_style(
-        'aros-editor-style',
-        get_template_directory_uri() . '/css/editor-style.css',
-        array('wp-edit-blocks'),
-        '1.0'
-    );
-    
-    // 프론트엔드 스타일
-    wp_register_style(
-        'aros-block-style',
-        get_template_directory_uri() . '/css/block-style.css',
-        array(),
-        '1.0'
-    );
-    
-    // 블록 카테고리 등록
-    register_block_type('aros/custom-blocks', array(
-        'editor_script' => 'aros-editor-script',
-        'editor_style' => 'aros-editor-style',
-        'style' => 'aros-block-style',
-    ));
-}
-add_action('init', 'aros_register_custom_blocks');
-
-// 커스텀 블록 카테고리 추가
-function aros_block_categories($categories) {
-    return array_merge(
-        $categories,
-        array(
-            array(
-                'slug' => 'aros-blocks',
-                'title' => 'Aros 카드 블록',
-                'icon' => 'admin-customizer',
-            ),
-        )
-    );
-}
-add_filter('block_categories_all', 'aros_block_categories', 10, 2);
-
 // 관리자 페이지에 커스텀 메뉴 추가
 function aros_add_admin_menu() {
     add_menu_page(
@@ -287,6 +239,10 @@ add_action('admin_menu', 'aros_add_admin_menu');
 
 // 글 생성기 페이지
 function aros_post_generator_page() {
+    // 폼 제출 처리
+    if (isset($_POST['generate_post']) && check_admin_referer('aros_generate_post', 'aros_nonce')) {
+        aros_create_generated_post($_POST);
+    }
     ?>
     <div class="wrap">
         <h1>Aros 홈페이지형 글 생성기</h1>
@@ -297,7 +253,7 @@ function aros_post_generator_page() {
             
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="post_title">글 제목</label></th>
+                    <th scope="row"><label for="post_title">글 제목 *</label></th>
                     <td><input type="text" id="post_title" name="post_title" class="regular-text" required></td>
                 </tr>
                 
@@ -308,7 +264,7 @@ function aros_post_generator_page() {
                 
                 <tr>
                     <th scope="row"><label for="main_card_subtitle">메인 카드 부제목</label></th>
-                    <td><textarea id="main_card_subtitle" name="main_card_subtitle" rows="3" class="large-text">지금부터 알아야 330만원 받을수 있습니다</textarea></td>
+                    <td><textarea id="main_card_subtitle" name="main_card_subtitle" rows="2" class="large-text">지금부터 알아야 330만원 받을수 있습니다</textarea></td>
                 </tr>
                 
                 <tr>
@@ -319,30 +275,30 @@ function aros_post_generator_page() {
                 <tr>
                     <th scope="row"><label>버튼 1</label></th>
                     <td>
-                        <input type="text" name="button1_title" placeholder="제목" class="regular-text" value="온라인"><br>
-                        <input type="text" name="button1_subtitle" placeholder="부제목" class="regular-text" value="신청gogo"><br>
-                        <input type="url" name="button1_url" placeholder="URL" class="regular-text"><br>
-                        <input type="text" name="button1_icon" placeholder="아이콘 (이모지)" value="🔥">
+                        <input type="text" name="button1_title" placeholder="제목" class="regular-text" value="온라인" style="margin-bottom:5px;"><br>
+                        <input type="text" name="button1_subtitle" placeholder="부제목" class="regular-text" value="신청gogo" style="margin-bottom:5px;"><br>
+                        <input type="url" name="button1_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                        <input type="text" name="button1_icon" placeholder="아이콘" class="regular-text" value="🔥">
                     </td>
                 </tr>
                 
                 <tr>
                     <th scope="row"><label>버튼 2</label></th>
                     <td>
-                        <input type="text" name="button2_title" placeholder="제목" class="regular-text" value="오프라인"><br>
-                        <input type="text" name="button2_subtitle" placeholder="부제목" class="regular-text" value="신청하기"><br>
-                        <input type="url" name="button2_url" placeholder="URL" class="regular-text"><br>
-                        <input type="text" name="button2_icon" placeholder="아이콘 (이모지)" value="✨">
+                        <input type="text" name="button2_title" placeholder="제목" class="regular-text" value="오프라인" style="margin-bottom:5px;"><br>
+                        <input type="text" name="button2_subtitle" placeholder="부제목" class="regular-text" value="신청하기" style="margin-bottom:5px;"><br>
+                        <input type="url" name="button2_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                        <input type="text" name="button2_icon" placeholder="아이콘" class="regular-text" value="✨">
                     </td>
                 </tr>
                 
                 <tr>
                     <th scope="row"><label>버튼 3</label></th>
                     <td>
-                        <input type="text" name="button3_title" placeholder="제목" class="regular-text"><br>
-                        <input type="text" name="button3_subtitle" placeholder="부제목" class="regular-text"><br>
-                        <input type="url" name="button3_url" placeholder="URL" class="regular-text"><br>
-                        <input type="text" name="button3_icon" placeholder="아이콘 (이모지)">
+                        <input type="text" name="button3_title" placeholder="제목" class="regular-text" value="근로장려금 신청방법" style="margin-bottom:5px;"><br>
+                        <input type="text" name="button3_subtitle" placeholder="부제목" class="regular-text" style="margin-bottom:5px;"><br>
+                        <input type="url" name="button3_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                        <input type="text" name="button3_icon" placeholder="아이콘" class="regular-text" value="📝">
                     </td>
                 </tr>
                 
@@ -363,13 +319,13 @@ function aros_post_generator_page() {
                 
                 <tr>
                     <th scope="row"><label for="info_description">안내 설명</label></th>
-                    <td><textarea id="info_description" name="info_description" rows="3" class="large-text">근로장려금을 받을 수 있는 조건을 확인하세요!</textarea></td>
+                    <td><textarea id="info_description" name="info_description" rows="2" class="large-text">근로장려금을 받을 수 있는 조건을 확인하세요!</textarea></td>
                 </tr>
                 
                 <tr>
                     <th scope="row"><label>요건 1</label></th>
                     <td>
-                        <input type="text" name="req1_title" placeholder="요건 제목" class="regular-text" value="1. 소득 요건"><br>
+                        <input type="text" name="req1_title" placeholder="요건 제목" class="regular-text" value="1. 소득 요건" style="margin-bottom:5px;"><br>
                         <textarea name="req1_desc" placeholder="요건 설명" rows="2" class="large-text">• 가구 합산 연간 소득이 기준 금액 이하인 경우
 • 근로, 사업, 기타 소득 포함</textarea>
                     </td>
@@ -378,7 +334,7 @@ function aros_post_generator_page() {
                 <tr>
                     <th scope="row"><label>요건 2</label></th>
                     <td>
-                        <input type="text" name="req2_title" placeholder="요건 제목" class="regular-text" value="2. 재산 요건"><br>
+                        <input type="text" name="req2_title" placeholder="요건 제목" class="regular-text" value="2. 재산 요건" style="margin-bottom:5px;"><br>
                         <textarea name="req2_desc" placeholder="요건 설명" rows="2" class="large-text">• 가구 재산 총액이 2억 원 이하
 • 주택, 자동차, 금융 자산 등 포함</textarea>
                     </td>
@@ -387,7 +343,7 @@ function aros_post_generator_page() {
                 <tr>
                     <th scope="row"><label>요건 3</label></th>
                     <td>
-                        <input type="text" name="req3_title" placeholder="요건 제목" class="regular-text" value="3. 지원 내용"><br>
+                        <input type="text" name="req3_title" placeholder="요건 제목" class="regular-text" value="3. 지원 내용" style="margin-bottom:5px;"><br>
                         <textarea name="req3_desc" placeholder="요건 설명" rows="2" class="large-text">• 최대 지원 금액은 가구 구성과 소득에 따라 결정
 • 신청 기간 내 반드시 접수 필요</textarea>
                     </td>
@@ -408,27 +364,27 @@ function aros_post_generator_page() {
                 <tr>
                     <th scope="row"><label>추천 링크 1</label></th>
                     <td>
-                        <input type="text" name="link1_text" placeholder="텍스트" class="regular-text" value="• 숨은보험금 찾기"><br>
-                        <input type="url" name="link1_url" placeholder="URL" class="regular-text"><br>
-                        <input type="text" name="link1_icon" placeholder="아이콘" value="💰">
+                        <input type="text" name="link1_text" placeholder="텍스트" class="regular-text" value="• 숨은보험금 찾기" style="margin-bottom:5px;"><br>
+                        <input type="url" name="link1_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                        <input type="text" name="link1_icon" placeholder="아이콘" class="regular-text" value="💰">
                     </td>
                 </tr>
                 
                 <tr>
                     <th scope="row"><label>추천 링크 2</label></th>
                     <td>
-                        <input type="text" name="link2_text" placeholder="텍스트" class="regular-text" value="• 건강보험료 환급금"><br>
-                        <input type="url" name="link2_url" placeholder="URL" class="regular-text"><br>
-                        <input type="text" name="link2_icon" placeholder="아이콘" value="🏥">
+                        <input type="text" name="link2_text" placeholder="텍스트" class="regular-text" value="• 건강보험료 환급금" style="margin-bottom:5px;"><br>
+                        <input type="url" name="link2_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                        <input type="text" name="link2_icon" placeholder="아이콘" class="regular-text" value="🏥">
                     </td>
                 </tr>
                 
                 <tr>
                     <th scope="row"><label>추천 링크 3</label></th>
                     <td>
-                        <input type="text" name="link3_text" placeholder="텍스트" class="regular-text" value="• 통신비 지원금"><br>
-                        <input type="url" name="link3_url" placeholder="URL" class="regular-text"><br>
-                        <input type="text" name="link3_icon" placeholder="아이콘" value="🔔">
+                        <input type="text" name="link3_text" placeholder="텍스트" class="regular-text" value="• 통신비 지원금" style="margin-bottom:5px;"><br>
+                        <input type="url" name="link3_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                        <input type="text" name="link3_icon" placeholder="아이콘" class="regular-text" value="🔔">
                     </td>
                 </tr>
                 
@@ -443,15 +399,10 @@ function aros_post_generator_page() {
                 </tr>
             </table>
             
-            <?php submit_button('글 생성하기', 'primary', 'generate_post'); ?>
+            <?php submit_button('글 생성하기', 'primary large', 'generate_post'); ?>
         </form>
     </div>
     <?php
-    
-    // 폼 제출 처리
-    if (isset($_POST['generate_post']) && check_admin_referer('aros_generate_post', 'aros_nonce')) {
-        aros_create_generated_post($_POST);
-    }
 }
 
 // 글 생성 함수
@@ -463,14 +414,15 @@ function aros_create_generated_post($data) {
         'post_content' => $content,
         'post_status' => 'draft',
         'post_type' => 'post',
+        'post_author' => get_current_user_id(),
     );
     
     $post_id = wp_insert_post($post_data);
     
-    if ($post_id) {
-        echo '<div class="notice notice-success"><p>글이 성공적으로 생성되었습니다! <a href="' . get_edit_post_link($post_id) . '">글 수정하기</a></p></div>';
+    if ($post_id && !is_wp_error($post_id)) {
+        echo '<div class="notice notice-success is-dismissible"><p>글이 성공적으로 생성되었습니다! <a href="' . get_edit_post_link($post_id) . '">글 수정하기</a> | <a href="' . get_permalink($post_id) . '">미리보기</a></p></div>';
     } else {
-        echo '<div class="notice notice-error"><p>글 생성에 실패했습니다.</p></div>';
+        echo '<div class="notice notice-error is-dismissible"><p>글 생성에 실패했습니다.</p></div>';
     }
 }
 
