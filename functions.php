@@ -2,7 +2,7 @@
 /**
  * 홈페이지형 글쓰기 스킨 - Functions
  * Theme Name: Aros Post Skin
- * Version: 1.0
+ * Version: 1.1
  */
 
 // 테마 기본 설정
@@ -244,164 +244,197 @@ function aros_post_generator_page() {
         aros_create_generated_post($_POST);
     }
     ?>
+    <script src="https://js.puter.com/v2/"></script>
     <div class="wrap">
-        <h1>Aros 홈페이지형 글 생성기</h1>
-        <p>아래 양식을 채워서 자동으로 홈페이지형 글을 생성하세요.</p>
+        <h1>Aros 홈페이지형 AI 글 생성기</h1>
+        <p>제목과 링크 정보만 입력하세요. 나머지는 AI가 자동으로 작성해줍니다.</p>
         
-        <form method="post" action="">
+        <form method="post" action="" id="aros-ai-form">
             <?php wp_nonce_field('aros_generate_post', 'aros_nonce'); ?>
             
-            <table class="form-table">
-                <tr>
-                    <th scope="row"><label for="post_title">글 제목 *</label></th>
-                    <td><input type="text" id="post_title" name="post_title" class="regular-text" required></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="main_card_title">메인 카드 제목</label></th>
-                    <td><input type="text" id="main_card_title" name="main_card_title" class="regular-text" value="근로장려금 신청"></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="main_card_subtitle">메인 카드 부제목</label></th>
-                    <td><textarea id="main_card_subtitle" name="main_card_subtitle" rows="2" class="large-text">지금부터 알아야 330만원 받을수 있습니다</textarea></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="button_section_title">버튼 섹션 제목</label></th>
-                    <td><input type="text" id="button_section_title" name="button_section_title" class="regular-text" value="최대 460만원, 지금 바로 신청!"></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>버튼 1</label></th>
-                    <td>
-                        <input type="text" name="button1_title" placeholder="제목" class="regular-text" value="온라인" style="margin-bottom:5px;"><br>
-                        <input type="text" name="button1_subtitle" placeholder="부제목" class="regular-text" value="신청gogo" style="margin-bottom:5px;"><br>
-                        <input type="url" name="button1_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
-                        <input type="text" name="button1_icon" placeholder="아이콘" class="regular-text" value="🔥">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>버튼 2</label></th>
-                    <td>
-                        <input type="text" name="button2_title" placeholder="제목" class="regular-text" value="오프라인" style="margin-bottom:5px;"><br>
-                        <input type="text" name="button2_subtitle" placeholder="부제목" class="regular-text" value="신청하기" style="margin-bottom:5px;"><br>
-                        <input type="url" name="button2_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
-                        <input type="text" name="button2_icon" placeholder="아이콘" class="regular-text" value="✨">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>버튼 3</label></th>
-                    <td>
-                        <input type="text" name="button3_title" placeholder="제목" class="regular-text" value="근로장려금 신청방법" style="margin-bottom:5px;"><br>
-                        <input type="text" name="button3_subtitle" placeholder="부제목" class="regular-text" style="margin-bottom:5px;"><br>
-                        <input type="url" name="button3_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
-                        <input type="text" name="button3_icon" placeholder="아이콘" class="regular-text" value="📝">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="date_card_title">신청기간 카드 제목</label></th>
-                    <td><input type="text" id="date_card_title" name="date_card_title" class="regular-text" value="근로장려금 신청기간"></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="date_range">신청 기간</label></th>
-                    <td><input type="text" id="date_range" name="date_range" class="regular-text" value="2025.05.01 ~ 05.31"></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="info_card_title">안내 카드 제목</label></th>
-                    <td><input type="text" id="info_card_title" name="info_card_title" class="regular-text" value="🌏 근로장려금 안내"></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="info_description">안내 설명</label></th>
-                    <td><textarea id="info_description" name="info_description" rows="2" class="large-text">근로장려금을 받을 수 있는 조건을 확인하세요!</textarea></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>요건 1</label></th>
-                    <td>
-                        <input type="text" name="req1_title" placeholder="요건 제목" class="regular-text" value="1. 소득 요건" style="margin-bottom:5px;"><br>
-                        <textarea name="req1_desc" placeholder="요건 설명" rows="2" class="large-text">• 가구 합산 연간 소득이 기준 금액 이하인 경우
-• 근로, 사업, 기타 소득 포함</textarea>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>요건 2</label></th>
-                    <td>
-                        <input type="text" name="req2_title" placeholder="요건 제목" class="regular-text" value="2. 재산 요건" style="margin-bottom:5px;"><br>
-                        <textarea name="req2_desc" placeholder="요건 설명" rows="2" class="large-text">• 가구 재산 총액이 2억 원 이하
-• 주택, 자동차, 금융 자산 등 포함</textarea>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>요건 3</label></th>
-                    <td>
-                        <input type="text" name="req3_title" placeholder="요건 제목" class="regular-text" value="3. 지원 내용" style="margin-bottom:5px;"><br>
-                        <textarea name="req3_desc" placeholder="요건 설명" rows="2" class="large-text">• 최대 지원 금액은 가구 구성과 소득에 따라 결정
-• 신청 기간 내 반드시 접수 필요</textarea>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="documents">준비서류</label></th>
-                    <td><textarea id="documents" name="documents" rows="3" class="large-text">• 소득금액증명원
-• 가족관계증명서
-• 혼인관계증명서 (해당자)</textarea></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="benefit_title">함께보면 좋은 글 제목</label></th>
-                    <td><input type="text" id="benefit_title" name="benefit_title" class="regular-text" value="나라에서 주는 용돈 모두 모아보기"></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>추천 링크 1</label></th>
-                    <td>
-                        <input type="text" name="link1_text" placeholder="텍스트" class="regular-text" value="• 숨은보험금 찾기" style="margin-bottom:5px;"><br>
-                        <input type="url" name="link1_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
-                        <input type="text" name="link1_icon" placeholder="아이콘" class="regular-text" value="💰">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>추천 링크 2</label></th>
-                    <td>
-                        <input type="text" name="link2_text" placeholder="텍스트" class="regular-text" value="• 건강보험료 환급금" style="margin-bottom:5px;"><br>
-                        <input type="url" name="link2_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
-                        <input type="text" name="link2_icon" placeholder="아이콘" class="regular-text" value="🏥">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label>추천 링크 3</label></th>
-                    <td>
-                        <input type="text" name="link3_text" placeholder="텍스트" class="regular-text" value="• 통신비 지원금" style="margin-bottom:5px;"><br>
-                        <input type="url" name="link3_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
-                        <input type="text" name="link3_icon" placeholder="아이콘" class="regular-text" value="🔔">
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="bottom_button_text">하단 버튼 텍스트</label></th>
-                    <td><input type="text" id="bottom_button_text" name="bottom_button_text" class="regular-text" value="국가 보조금 알아보기"></td>
-                </tr>
-                
-                <tr>
-                    <th scope="row"><label for="bottom_button_url">하단 버튼 URL</label></th>
-                    <td><input type="url" id="bottom_button_url" name="bottom_button_url" class="regular-text"></td>
-                </tr>
-            </table>
+            <div style="background: #fff; padding: 20px; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04); margin-bottom: 20px;">
+                <h3>📝 기본 정보 입력</h3>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="post_title">글 제목 *</label></th>
+                        <td><input type="text" id="post_title" name="post_title" class="regular-text" placeholder="예: 2025년 근로장려금 신청방법" required></td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row"><label>버튼 1</label></th>
+                        <td>
+                            <input type="text" name="button1_title" placeholder="제목 (예: 온라인)" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="button1_subtitle" placeholder="부제목 (예: 신청바로가기)" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="url" name="button1_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="button1_icon" placeholder="아이콘 (예: 🔥)" class="regular-text" value="🔥">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row"><label>버튼 2</label></th>
+                        <td>
+                            <input type="text" name="button2_title" placeholder="제목" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="button2_subtitle" placeholder="부제목" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="url" name="button2_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="button2_icon" placeholder="아이콘" class="regular-text" value="✨">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row"><label>버튼 3</label></th>
+                        <td>
+                            <input type="text" name="button3_title" placeholder="제목" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="button3_subtitle" placeholder="부제목" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="url" name="button3_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="button3_icon" placeholder="아이콘" class="regular-text" value="📝">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label>추천 링크 1</label></th>
+                        <td>
+                            <input type="text" name="link1_text" placeholder="텍스트" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="url" name="link1_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="link1_icon" placeholder="아이콘" class="regular-text" value="💰">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label>추천 링크 2</label></th>
+                        <td>
+                            <input type="text" name="link2_text" placeholder="텍스트" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="url" name="link2_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="link2_icon" placeholder="아이콘" class="regular-text" value="🏥">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label>추천 링크 3</label></th>
+                        <td>
+                            <input type="text" name="link3_text" placeholder="텍스트" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="url" name="link3_url" placeholder="URL" class="regular-text" style="margin-bottom:5px;"><br>
+                            <input type="text" name="link3_icon" placeholder="아이콘" class="regular-text" value="🔔">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="bottom_button_text">하단 버튼</label></th>
+                        <td>
+                            <input type="text" id="bottom_button_text" name="bottom_button_text" class="regular-text" value="자세히 알아보기" placeholder="버튼 텍스트" style="margin-bottom:5px;"><br>
+                            <input type="url" id="bottom_button_url" name="bottom_button_url" class="regular-text" placeholder="버튼 URL">
+                        </td>
+                    </tr>
+                </table>
+            </div>
             
-            <?php submit_button('글 생성하기', 'primary large', 'generate_post'); ?>
+            <input type="hidden" id="main_card_title" name="main_card_title">
+            <input type="hidden" id="main_card_subtitle" name="main_card_subtitle">
+            <input type="hidden" id="button_section_title" name="button_section_title">
+            <input type="hidden" id="date_card_title" name="date_card_title">
+            <input type="hidden" id="date_range" name="date_range">
+            <input type="hidden" id="info_card_title" name="info_card_title">
+            <input type="hidden" id="info_description" name="info_description">
+            <input type="hidden" id="req1_title" name="req1_title">
+            <input type="hidden" id="req1_desc" name="req1_desc">
+            <input type="hidden" id="req2_title" name="req2_title">
+            <input type="hidden" id="req2_desc" name="req2_desc">
+            <input type="hidden" id="req3_title" name="req3_title">
+            <input type="hidden" id="req3_desc" name="req3_desc">
+            <input type="hidden" id="documents" name="documents">
+            <input type="hidden" id="benefit_title" name="benefit_title">
+
+            <div style="margin-top: 20px;">
+                <button type="button" id="ai-generate-btn" class="button button-primary button-large" style="width: 100%; height: 50px; font-size: 16px;">
+                    ✨ AI로 내용 생성 및 글 작성 완료
+                </button>
+                <div id="loading-msg" style="display:none; text-align:center; margin-top:10px; color: #2271b1; font-weight:bold;">
+                    AI가 글 내용을 작성중입니다... (약 5~10초 소요)
+                </div>
+                <input type="submit" name="generate_post" id="real-submit-btn" style="display:none;">
+            </div>
         </form>
     </div>
+
+    <script>
+    document.getElementById('ai-generate-btn').addEventListener('click', async function() {
+        const title = document.getElementById('post_title').value;
+        if (!title) {
+            alert('글 제목을 입력해주세요.');
+            document.getElementById('post_title').focus();
+            return;
+        }
+
+        // 로딩 표시
+        const btn = this;
+        const loading = document.getElementById('loading-msg');
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        loading.style.display = 'block';
+
+        try {
+            // Puter AI 프롬프트 생성
+            const prompt = `
+                너는 블로그 콘텐츠 생성 전문가야. 아래 주제에 맞춰서 정보성 블로그 글에 들어갈 내용을 JSON 형식으로 생성해줘.
+                
+                주제: ${title}
+
+                다음 필드들에 들어갈 내용을 한국어로 아주 자연스럽고 매력적으로 작성해줘.
+                필수 반환 필드 (JSON Key):
+                1. main_card_title: (짧은 제목, 예: 근로장려금 신청)
+                2. main_card_subtitle: (클릭을 유도하는 부제목, 예: 지금부터 알아야 330만원 받을수 있습니다)
+                3. button_section_title: (버튼 섹션 위의 문구, 예: 최대 460만원, 지금 바로 신청!)
+                4. date_card_title: (날짜 카드 제목, 예: 신청기간)
+                5. date_range: (가상의 또는 현실적인 기간, 예: 2025.05.01 ~ 05.31)
+                6. info_card_title: (안내 카드 제목, 예: 🌏 상세 안내)
+                7. info_description: (한 줄 요약 설명)
+                8. req1_title: (자격요건 1 제목, 예: 1. 소득 요건)
+                9. req1_desc: (자격요건 1 설명, 줄바꿈은 \\n 사용)
+                10. req2_title: (자격요건 2 제목)
+                11. req2_desc: (자격요건 2 설명)
+                12. req3_title: (자격요건 3 제목)
+                13. req3_desc: (자격요건 3 설명)
+                14. documents: (필요 서류 목록, 불렛포인트 • 사용해서 줄바꿈)
+                15. benefit_title: (혜택 섹션 제목, 예: 함께보면 좋은 글)
+
+                응답은 오직 JSON 포맷만 출력해. 마크다운 코드블럭 없이 순수 JSON 문자열만 줘.
+            `;
+
+            const response = await puter.ai.chat(prompt);
+            
+            // 응답 처리 (JSON 파싱)
+            let jsonStr = response.message.content;
+            // 혹시 모를 마크다운 제거
+            jsonStr = jsonStr.replace(/```json/g, '').replace(/```/g, '').trim();
+            
+            const data = JSON.parse(jsonStr);
+
+            // Hidden Field 채우기
+            document.getElementById('main_card_title').value = data.main_card_title || '안내';
+            document.getElementById('main_card_subtitle').value = data.main_card_subtitle || title;
+            document.getElementById('button_section_title').value = data.button_section_title || '지금 바로 확인하세요';
+            document.getElementById('date_card_title').value = data.date_card_title || '신청 기간';
+            document.getElementById('date_range').value = data.date_range || '별도 공지 시까지';
+            document.getElementById('info_card_title').value = data.info_card_title || '상세 안내';
+            document.getElementById('info_description').value = data.info_description || '자세한 내용을 확인하세요.';
+            document.getElementById('req1_title').value = data.req1_title || '조건 1';
+            document.getElementById('req1_desc').value = data.req1_desc || '';
+            document.getElementById('req2_title').value = data.req2_title || '조건 2';
+            document.getElementById('req2_desc').value = data.req2_desc || '';
+            document.getElementById('req3_title').value = data.req3_title || '조건 3';
+            document.getElementById('req3_desc').value = data.req3_desc || '';
+            document.getElementById('documents').value = data.documents || '';
+            document.getElementById('benefit_title').value = data.benefit_title || '함께 보면 좋은 글';
+
+            // 폼 제출
+            document.getElementById('real-submit-btn').click();
+
+        } catch (error) {
+            console.error(error);
+            alert('AI 생성 중 오류가 발생했습니다. 다시 시도해주시거나 수동으로 입력해주세요.\n' + error.message);
+            loading.style.display = 'none';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
+    });
+    </script>
     <?php
 }
 
@@ -430,7 +463,6 @@ function aros_create_generated_post($data) {
 function aros_generate_post_content($data) {
     ob_start();
     ?>
-<!--상단 탭-->
 <div class="tab-wrapper">
     <div class="container">
         <nav class="tab-container">
@@ -453,13 +485,11 @@ function aros_generate_post_content($data) {
     </div>
 </div>
 
-<!--1.상단 주목도 높은 메시지-->
 <div class="aros-gray-card-center">
     <h3><?php echo esc_html($data['main_card_title']); ?></h3>
     <h2><?php echo esc_html($data['main_card_subtitle']); ?></h2>
 </div>
 
-<!--애드센스 광고-->
 <?php if (get_theme_mod('adsense_client') && get_theme_mod('adsense_slot')): ?>
 <div>
     <script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<?php echo esc_attr(get_theme_mod('adsense_client')); ?>"></script>
@@ -468,7 +498,12 @@ function aros_generate_post_content($data) {
 </div>
 <?php endif; ?>
 
-<!--2.메뉴 버튼들-->
+<?php if($data['button_section_title']): ?>
+<div style="text-align: center; margin: 20px 0 10px; font-weight: bold; font-size: 1.1em; color: #333;">
+    <?php echo esc_html($data['button_section_title']); ?>
+</div>
+<?php endif; ?>
+
 <div class="apply-container">
     <?php for ($i = 1; $i <= 3; $i++):
         if (!empty($data["button{$i}_title"])):
@@ -478,7 +513,7 @@ function aros_generate_post_content($data) {
             <div class="button-container">
                 <div class="button-content">
                     <span class="button-text"><?php echo esc_html($data["button{$i}_title"] . ' ' . $data["button{$i}_subtitle"]); ?></span>
-                    <span>→</span>
+                    <span><?php echo esc_html($data["button{$i}_icon"]); ?> →</span>
                 </div>
             </div>
         </a>
@@ -486,7 +521,6 @@ function aros_generate_post_content($data) {
     <?php endif; endfor; ?>
 </div>
 
-<!--3.신청기간 안내 박스-->
 <div class="aros-gray-card" style="margin: 20px 0px;">
     <div style="align-items: center; display: flex; justify-content: space-between;">
         <div style="flex: 3 1 0%;">
@@ -500,7 +534,6 @@ function aros_generate_post_content($data) {
     </div>
 </div>
 
-<!--4.상품 설명-->
 <div class="aros-gray-card">
     <h3><?php echo esc_html($data['info_card_title']); ?></h3>
     <p class="description"><?php echo esc_html($data['info_description']); ?></p>
@@ -522,7 +555,6 @@ function aros_generate_post_content($data) {
     </div>
 </div>
 
-<!--5. 함께보면 좋은 글-->
 <div class="aros-gray-card benefit-card">
     <h3 class="benefit-title">
         <span class="icon">🎯</span>
@@ -542,12 +574,14 @@ function aros_generate_post_content($data) {
         <?php endif; endfor; ?>
     </div>
 
+    <?php if(!empty($data['bottom_button_url'])): ?>
     <a href="<?php echo esc_url($data['bottom_button_url']); ?>">
         <button class="bottom-button">
             <span><?php echo esc_html($data['bottom_button_text']); ?></span>
             <span>→</span>
         </button>
     </a>
+    <?php endif; ?>
 </div>
     <?php
     return ob_get_clean();
