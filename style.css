@@ -2,577 +2,117 @@
 Theme Name: Aros Post Skin
 Theme URI: https://aros100.com
 Author: Aros
-Author URI: https://aros100.com
 Description: 홈페이지형 글쓰기 스킨
-Version: 1.0
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Version: 1.1
 */
 
-/* 기본 스타일 초기화 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-}
+/* 기본 초기화 */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans KR', sans-serif; }
+body { padding-top: 60px; color: #333; line-height: 1.6; font-size: 16px; word-break: keep-all; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; height: auto; display: block; }
 
-html, body {
-    margin: 0;
-    padding-top: 50px;
-    width: 100%;
-    overflow-x: hidden;
-    box-sizing: border-box;
-}
-
-.container {
-    max-width: 768px;
-    padding: 0 10px;
-    margin: 0 auto;
-    box-sizing: border-box;
-}
+.container { max-width: 768px; margin: 0 auto; padding: 0 15px; }
 
 /* 헤더 */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    z-index: 1000;
-}
+.header { position: fixed; top: 0; left: 0; width: 100%; background: white; z-index: 1000; border-bottom: 1px solid #eee; height: 50px; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-size: 1.1rem; font-weight: 700; color: #333; }
 
-.header .container {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    justify-content: center;
-    max-width: 768px;
-    margin: 0 auto;
-    height: 42px;
-}
+/* -----------------------------------------------------------
+   [중요] 제목 및 본문 스타일 (수정됨)
+----------------------------------------------------------- */
+.post-header { margin: 20px 0 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
 
-.logo img {
-    height: 30px;
-    width: auto;
-    object-fit: contain;
-    vertical-align: middle;
-}
-
-.logo-text {
-    margin-left: 10px;
-    font-size: 24px;
-}
-
-/* 탭 메뉴 */
-.tab-wrapper {
-    position: fixed !important;
-    top: 42px !important;
-    left: 0 !important;
-    width: 100% !important;
-    background: white !important;
-    z-index: 999 !important;
-    padding: 0 !important;
-}
-
-.tab-container {
-    background: white !important;
-    border-radius: 50px !important;
-    padding: 5px !important;
-    margin: 0 auto !important;
-    max-width: 768px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-}
-
-.tabs {
-    display: flex !important;
-    justify-content: space-between !important;
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.tab-item {
-    flex: 1 !important;
-    text-align: center !important;
-    margin: 0 !important;
-}
-
-.tab-link {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 12px 6px !important;
-    text-decoration: none !important;
-    color: #666 !important;
-    border-radius: 25px !important;
-    transition: all 0.3s ease !important;
-    font-size: 14px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-}
-
-.tab-link:hover {
-    text-decoration: none !important;
-    color: #666 !important;
-}
-
-.tab-link.active {
-    background-color: #6528f7 !important;
-    color: white !important;
-    text-decoration: none !important;
-}
-
-@media screen and (max-width: 480px) {
-    .tab-container {
-        width: 92% !important;
-    }
-}
-
-/* 컨텐츠 영역 */
-#main {
-    padding: 0 !important;
-    background: white !important;
-}
-
-.main {
-    max-width: 768px !important;
-    margin: 0 auto !important;
-    background: white !important;
-    padding: 0 !important;
-}
-
-.post-body {
-    max-width: 768px !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    overflow-x: hidden;
-}
-
-/* 애드센스 */
-.ad-container {
-    width: 100%;
-    max-width: 768px;
-    margin: 15px auto;
-    box-sizing: border-box;
-}
-
-.adsbygoogle {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 auto !important;
-}
-
-/* 카드 스타일 */
-.aros-blue-card {
-    background: #EEF6FF;
-    border-radius: 16px;
-    padding: 20px;
-    margin: 15px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-.aros-blue-card h2 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #2196F3;
-    margin: 2px 0px 15px;
-}
-
-.aros-blue-card ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.aros-blue-card li {
-    position: relative;
-    padding-left: 15px;
+/* 제목 길이 및 크기 조절 */
+.entry-title { 
+    font-size: 24px; /* PC 기본 크기 */
+    font-weight: 700; 
+    line-height: 1.3; 
+    color: #111; 
     margin-bottom: 10px;
+    letter-spacing: -0.5px;
 }
 
-.aros-blue-card li:before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: #2196F3;
-}
+.post-meta { font-size: 13px; color: #888; }
 
-.aros-blue-card p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-}
+/* 본문 콘텐츠 */
+.entry-content { font-size: 16px; color: #333; }
+.entry-content p { margin-bottom: 1.5em; }
+.entry-content h2 { font-size: 20px; font-weight: bold; margin: 40px 0 15px; border-left: 4px solid #2962ff; padding-left: 10px; line-height: 1.2; }
+.entry-content h3 { font-size: 18px; font-weight: bold; margin: 30px 0 10px; }
 
-/* 회색 중앙 카드 */
-.aros-gray-card-center {
-    background: rgb(248, 249, 250);
-    border-radius: 16px;
-    padding: 25px;
-    text-align: center;
-    margin: 20px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-.aros-gray-card-center h2 {
-    font-size: 28px;
-    font-weight: bold;
-    color: #6528f7;
-    margin: 0px 0px 10px;
-}
-
-.aros-gray-card-center h3 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #363636;
-    margin: 0px 0px 5px;
-}
-
-/* 회색 카드 */
+/* -----------------------------------------------------------
+   [중요] 정보 카드 (회색 박스) 스타일
+   (글이 이상하게 보이는 문제 해결)
+----------------------------------------------------------- */
 .aros-gray-card {
-    background: rgb(248, 249, 250);
-    border-radius: 16px;
-    padding: 25px;
-    margin: 20px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
 }
 
-.aros-gray-card h2 {
-    font-size: 28px;
-    font-weight: bold;
-    color: #6528f7;
-    margin: 0px 0px 10px;
-}
-
-.aros-gray-card h3 {
-    font-size: 23px;
-    font-weight: bold;
-    color: #363636;
-    margin: 0px 0px 5px;
-}
-
-.aros-gray-card p {
+/* 1. 자격요건 리스트 */
+.requirement-item {
     margin-bottom: 15px;
-    line-height: 1.6;
-    color: #666666;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #ddd;
 }
+.requirement-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.requirement-title { font-weight: bold; color: #2962ff; margin-bottom: 5px !important; font-size: 1.05rem; }
+.requirement-desc { font-size: 0.95rem; color: #555; margin: 0 !important; }
 
-.aros-gray-card .apply-date-text {
-    color: #6528f7;
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.aros-gray-card .apply-text {
-    color: #666666;
-}
-
-.aros-gray-card .description {
-    color: #444444;
-    margin: 10px 0px;
-}
-
-.aros-gray-card .highlight-box {
-    background: rgb(243, 244, 246);
+/* 2. 하이라이트 박스 (준비서류 등) */
+.highlight-box {
+    background: #e3f2fd; /* 연한 파랑 배경 */
     border-radius: 8px;
-    margin-top: 15px;
     padding: 15px;
-}
-
-.aros-gray-card .requirements {
-    padding: 20px;
-}
-
-.aros-gray-card .requirement-item {
-    margin-bottom: 15px;
-}
-
-.aros-gray-card .requirement-title {
-    font-weight: 600;
-    color: #6528F7;
-    margin-bottom: 8px;
-}
-
-.aros-gray-card .requirement-desc {
-    color: #666;
-    font-size: 15px;
-}
-
-.aros-gray-card .documents {
-    margin-top: 15px;
-    padding: 15px;
-}
-
-.aros-gray-card .documents-title {
-    font-size: 16px;
-    font-weight: bold;
-    color: #6528F7;
-    margin-bottom: 10px;
-}
-
-.aros-gray-card .documents-list {
-    color: #666;
-    font-size: 15px;
-}
-
-/* 흰색 카드 */
-.aros-white-card {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    margin: 15px 0;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-.aros-white-card h2 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #6528f7;
-    margin: 2px 0px 15px;
-}
-
-.aros-white-card ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.aros-white-card li {
-    position: relative;
-    padding-left: 15px;
-    margin-bottom: 10px;
-}
-
-.aros-white-card li:before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: #6528f7;
-}
-
-.aros-white-card p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-}
-
-/* 버튼 컨테이너 */
-.apply-container {
-    max-width: 100%;
-    overflow-x: hidden;
-    padding: 5px;
-    width: 100%;
-}
-
-.link-container {
-    margin: 0px 5px;
-}
-
-.custom-link {
-    display: block;
-    margin: 10px 0px;
-    text-decoration: none;
-}
-
-.button-container {
-    background: rgb(101, 40, 247);
-    border-radius: 12px;
-    color: white;
-    cursor: pointer;
-    padding: 18px;
-    transition: 0.3s;
-}
-
-.button-container:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 15px rgba(101, 40, 247, 0.3);
-}
-
-.button-content {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-}
-
-.button-text {
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-}
-
-/* 혜택 카드 */
-.benefit-card {
-    background: rgb(248, 249, 251);
-    border-radius: 16px;
-    margin: 20px 0px;
-    padding: 25px;
-}
-
-.benefit-card a {
-    text-decoration: none;
-}
-
-.benefit-title {
-    align-items: center;
-    display: flex;
-    margin-bottom: 20px;
-}
-
-.benefit-title .icon {
-    color: #ff4d4d;
-    margin-right: 8px;
-}
-
-.benefit-list {
-    background: rgb(243, 244, 246);
-    border-radius: 12px;
-    padding: 20px;
-}
-
-.benefit-item {
-    align-items: center;
-    background: white;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    padding: 16px;
-    transition: 0.3s;
-}
-
-.benefit-item:hover {
-    transform: scale(1.02);
-    background-color: #f8f9fa;
-}
-
-.benefit-text {
-    color: #333333;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-}
-
-.bottom-button {
-    align-items: center;
-    background: rgb(101, 40, 247);
-    border-radius: 12px;
-    border: none;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    font-size: 17px;
-    font-weight: 600;
-    justify-content: space-between;
-    letter-spacing: -0.5px;
     margin-top: 20px;
-    padding: 18px;
-    transition: 0.3s;
-    width: 100%;
 }
+.documents-title { font-weight: bold; margin-bottom: 8px !important; color: #0d47a1; }
+.documents-list { font-size: 0.95rem; color: #444; margin: 0 !important; line-height: 1.6; }
 
-.bottom-button:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(101, 40, 247, 0.3);
+/* 3. 혜택/링크 버튼 스타일 */
+.benefit-title { font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+.benefit-list { display: flex; flex-direction: column; gap: 10px; }
+.benefit-item {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    transition: all 0.2s;
 }
+.benefit-item:hover { border-color: #2962ff; color: #2962ff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+/* 신청하기 버튼 */
+.apply-button {
+    display: block;
+    background: #2962ff;
+    color: white !important;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(41, 98, 255, 0.2);
+}
+.apply-button:hover { background: #1e40ff; transform: translateY(-2px); }
 
 /* 푸터 */
-.footer {
-    flex-shrink: 0;
-    background: #E3F2FD;
-    color: #333;
-    padding: 20px 0;
-    margin-top: 30px;
-    width: 100%;
-}
+.footer { background: #f9f9f9; padding: 40px 0; margin-top: 50px; border-top: 1px solid #eee; font-size: 13px; color: #666; }
+.footer-content { display: flex; justify-content: space-between; gap: 20px; }
+.footer-brand { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #333; }
+.footer-info li { margin-bottom: 5px; }
 
-.footer-content {
-    max-width: 768px;
-    margin: 0 auto;
-    padding: 0 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.footer-left {
-    flex: 1;
-}
-
-.footer-right {
-    text-align: right;
-}
-
-.footer-right a {
-    color: #1976D2;
-    text-decoration: none;
-}
-
-.footer-right a:hover {
-    text-decoration: underline;
-}
-
-.footer-copyright {
-    color: #666;
-    font-size: 0.9rem;
-    margin-top: 10px;
-}
-
-.footer-brand {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #1976D2;
-}
-
-.footer-info {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-info li {
-    margin-bottom: 2px;
-    color: #666;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* 모바일 대응 */
+/* 모바일 반응형 */
 @media (max-width: 768px) {
-    .footer-content {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .footer-left,
-    .footer-right {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    
-    .footer-info li {
-        justify-content: center;
-        margin-bottom: 8px;
-    }
-    
-    .footer-right p,
-    .footer-right a {
-        text-align: center;
-        margin-bottom: 8px;
-    }
-    
-    body {
-        font-size: 18px;
-    }
-    
-    .container {
-        padding: 10px;
-        width: 100% !important;
-    }
-    
-    .tab-link {
-        padding: 10px 8px;
-        font-size: 14px;
-    }
-  }
+    .entry-title { font-size: 21px; word-break: keep-all; } /* 모바일에서 제목 크기 축소 및 단어 단위 줄바꿈 */
+    .footer-content { flex-direction: column; text-align: left; }
+    .footer-right { text-align: left; margin-top: 15px; }
+}
